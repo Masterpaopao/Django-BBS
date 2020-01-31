@@ -1,0 +1,31 @@
+{% extends 'bbscopy/base.html' %}
+{% load static %}
+
+{% block title %}
+UP2U - BBS | 用户注册
+{% endblock %}
+
+
+{% block content %}
+<div class="col-4 m-auto">
+    <form class="form-signin mt-5" action="{% url 'accounts:register_user' %}" method="POST">
+        {% csrf_token %}
+        {% if error_message %}
+        <h1 class="h3 mt-5 mb-5 text-danger font-weight-normal text-center">{{error_message}}</h1>
+        {% else %}
+        <h1 class="h3 mt-5 mb-5 font-weight-normal text-center">新人，欢迎您</h1>
+        {% endif %}
+        {{ registerform.as_p }}
+        <div class="checkbox mb-2">
+            <label>
+                <input checked type="checkbox" value="agree-me">阅读并接受《用户协议》及《隐私权保护声明》
+            </label>
+        </div>
+        <div class="mb-1">
+            <a class="float-right" href="{% url 'accounts:login_user' %}">已有账号？直接登录</a>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block mt-5" type="submit">注册</button>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; Masterpaopao</p>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'bbscopy/base.html' %}
+{% load static %}
+
+{% block title %}
+UP2U - BBS | 用户登录
+{% endblock %}
+
+
+{% block content %}
+<div class="col-4 m-auto">
+    <form class="form-signin mt-5" action="{% url 'accounts:login_user' %}" method="POST">
+        {% csrf_token %}
+        {% if success_message %}
+        <h1 class="h3 mt-5 mb-5 text-success font-weight-normal text-center">{{success_message}}</h1>
+        {% else %}
+            {% if error_message %}
+            <h1 class="h3 mt-5 mb-5 text-danger font-weight-normal text-center">{{error_message}}</h1>
+            {% else %}
+            <h1 class="h3 mt-5 mb-5 font-weight-normal text-center">旧人，欢迎您</h1>
+            {% endif %}
+        {% endif %}
+        <label for="inputName">用户：</label>
+        <input type="text" id="inputName" name="inputName" class="form-control mb-3" placeholder="您的名字..."
+            required autofocus>
+        <label for="inputPassword">密码：</label>
+        <input type="password" id="inputPassword" name="inputPassword" class="form-control mb-3"
+            placeholder="您的密码..." required>
+        <div class="checkbox mb-3">
+            <label>
+                <input checked type="checkbox" value="remember-me"> 记住我
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <div class="mt-1">
+            <a href="#!">忘记密码？</a>
+            <a class="float-right" href="{% url 'accounts:register_user'%}">没有帐号？立即注册</a>
+        </div>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; Masterpaopao</p>
+    </form>
+</div>
+{% endblock %}

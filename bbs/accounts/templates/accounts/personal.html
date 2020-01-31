@@ -1,0 +1,137 @@
+{% extends 'bbscopy/base.html' %}
+{% load static %}
+
+{% block title %}
+UP2U - BBS | 个人中心
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+
+    <div class="row">
+        <!-- left -->
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <span class="text-info">个人信息</span>
+                </div>
+                <div class="card-body">
+                    <div class="m-t-30 text-center">
+                        {% if now_user_d.picture %}
+                        <img src="{{ now_user_d.picture.url }}" class="img-circle" height="150" width="150">
+                        {% else %}
+                        <img src="{% static 'images/公用头像.jpg' %}" class="img-circle" height="150" width="150">
+                        {% endif %}
+                        <h4 class="card-title m-t-10 mt-3 text-dark">{{now_user.user}}</h4>
+                        <div class="row text-center justify-content-md-center">
+                            <div class="col-4 flex-column">
+                                <div class="font-medium">发帖</div>
+                                <div class="font-medium">{{now_user_q.count}}</div>
+                            </div>
+                            <div class="col-4 flex-column">
+                                <div class="font-medium">评论</div>
+                                <div class="font-medium">{{now_user_c.count}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body">
+                    <form action="{% url 'accounts:personal' %}" method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="personal_name">昵称:</label>
+                            <input type="text" name="ersonal_name" id="personal_name" value="{{now_user.user}}"
+                                disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="personal_email">邮箱:</label>
+                            <input type="email" name="personal_email" id="personal_email"
+                                value="{{now_user.user.email}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="personal_sex">性别:</label>
+                            <input class="ml-1 mr-1" {% if now_user_d.sex == '1' %} checked {% endif %} type="radio"
+                                name="personal_sex" id="personal_sex_b" value="1">男
+                            <input class="ml-1 mr-1" {% if now_user_d.sex == '2' %} checked {% endif %} type="radio"
+                                name="personal_sex" id="personal_sex_g" value="2">女
+                        </div>
+                        <div class="form-group">
+                            <label for="personal_country">国家:</label>
+                            <input type="text" name="personal_country" id="personal_country"
+                                value="{{now_user_d.country}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="personal_picture">头像:</label>
+                            <input type="file" name="personal_picture" id="personal_picture">
+                        </div>
+                        <input class="btn btn-light mt-2 ml-5" type="submit" value="更新">
+                        <input class="btn btn-light mt-2 ml-5" type="reset" value="重置">
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-header bg-white">
+                    <span class="text-info">发帖历史</span>
+                </div>
+                <div class="card-body">
+                    {% if now_user_q %}
+                        {% for q in now_user_q %}
+                        <p><a href="{% url 'bbscopy:detail' q.id%}" class="text-dark">{{q.question_title}}</a></p> 
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-dark">此用户还未发过贴~</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- right -->
+        <div class="col-lg-8 col-xlg-9 col-md-7">
+            <div class="card">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs profile-tab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#!" role="tab"
+                            aria-expanded="true">回帖列表</a> </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- first tab -->
+                    <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true">
+                        <div class="card-body">
+                            {% if now_user_c %}
+                            <div class="profiletimeline">
+                                {% for c in now_user_c %}
+                                <div class="sl-item">
+                                    <div class="sl-right">
+                                        <div>
+                                            <p class="m-t-10">{{c.choice_text}}</p>
+                                        </div>
+                                        <div class="like-comm m-t-20">
+                                            <span class="text-dark">原帖：</span>
+                                            {% for cc,dd in c_to_d_dict.items %}
+                                            {% if c.id == cc %}
+                                            <a href="{% url 'bbscopy:detail' c.question_id%}"
+                                                class="link m-r-10">{{dd}}</a>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <p class="text-dark">此用户还未回过贴~</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'bbscopy/base.html' %}
+{% load static %}
+
+{% block title %}
+UP2U - BBS | 邮箱跳转
+{% endblock %}
+
+{% block content %}
+<div class="col-4 m-auto">
+    {% if success_message %}
+    <h1 class="h3 mt-5 mb-5 text-success font-weight-normal text-center">{{success_message}}</h1>
+    {% else %}
+    <h1 class="h3 mt-5 mb-5 font-weight-normal text-center">您好，来这儿有什么事呢？</h1>
+    {% endif %}
+    <div class="mb-1">
+        <h3>我还未验证邮箱</h3>
+        <a class="btn btn-lg btn-primary btn-block mb-5" href="https://mail.qq.com" target="_blank">前往邮箱</a>
+    </div>
+    <div class="mb-1">
+        <h3>我已验证邮箱</h3>
+        <a class="btn btn-lg btn-primary btn-block mb-5" href="{% url 'accounts:login_user'%}" target="_blank">登录</a>
+    </div>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; Masterpaopao</p>
+</div>
+{% endblock %}

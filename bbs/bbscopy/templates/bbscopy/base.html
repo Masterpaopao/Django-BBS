@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'cdn/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/offcanvas.css'%}" >
+    {% block csslink %}
+    {% endblock %}
+</head>
+<body>
+ 
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <span class="text-white h5 mt-2 mr-2">UP2U - BBS</span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample07">
+        <ul class="navbar-nav ml-3 mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/bbscopy">首页<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-md-0" method="GET" action="{% url 'bbscopy:index' %}">
+          <input class="form-control" type="text" placeholder="关键词..." aria-label="Search" 
+          name="query" value="{{request.GET.query}}">
+        </form>
+            {% if now_user.is_login %}
+            <a class="nav-link ml-5 text-light" href="#!">{{now_user.user}}</a>
+            <a class="nav-link" href="{% url 'accounts:personal' %}">个人中心</a>
+            <a class="nav-link text-info" href="{% url 'accounts:logout_user' %}">登出</a>
+            {% else %}
+            <a class="nav-link ml-5" href="{% url 'accounts:login_user' %}">登录</a>
+            <a class="nav-link" href="{% url 'accounts:register_user' %}">注册</a>
+            {% endif %}
+      </div>
+    </div>
+</nav>
+
+
+{% block nav-second %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+   
+
+<script src="{% static 'cdn/bootstrap.min.js'%}"></script>
+<script src="{% static 'cdn/jquery.slim.min.js'%}"></script>
+<script src="{% static 'cdn/popper.min.js'%}"></script>
+
+{% block jslink %}
+{% endblock %}
+
+</body>
+</html>

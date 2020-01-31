@@ -1,0 +1,138 @@
+{% extends 'bbscopy/base.html'%}
+{% load static %}
+
+{% block title %}
+UP2U - BBS | {{bbscopy.question_title}}
+{% endblock %}
+
+{% block csslink %}
+<link rel="stylesheet" href="{% static 'css/simplemde.min.css' %}">
+{% endblock %}
+
+<h1>{{error_message}}</h1>
+
+{% block nav-second %}
+<div class="nav-scroller bg-light box-shadow">
+    <nav class="nav nav-underline container">
+        <span class="text-danger mt-2">热门评论：</span>
+        {% for one in bbscopy.choice_set.all %}
+        {% if 3 >= forloop.counter %}
+        <span class="text-dark mt-2">{{one.choice_text}}</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        {% endif %}
+        {% endfor %}
+    </nav>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container card flex-md-row mt-3 box-shadow border-white">
+    <!-- 左边帖子主题部分 -->
+    <div class="card-body d-flex flex-column align-items-start">
+        <strong class="d-inline-block text-primary">UP2U - BBS</strong>
+        <h3 class="mt-2">
+            <a class="text-dark" href="">{{bbscopy.question_title}}</a>
+        </h3>
+        <div class="mt-2 text-muted">{{bbscopy.pub_date | date:"Y/m/d H:i:s"}}</div>
+        <p class="card-text mt-2">楼主：{{bbscopy.user}}</p>
+    </div>
+    <!-- 右边作者信息 -->
+    <div class="card-body little-profile text-center border-left">
+        <div class="pro-img">
+            <img width="70" height="70" style="border-radius: 50%;" src="{{q_pic.url}}" alt="{{bbscopy.user}}">
+        </div>
+        <h3 class="m-b-0 mt-1">{{bbscopy.user}}</h3>
+        <button type="button" class="btn btn-primary btn-sm">关注</button>
+    </div>
+</div>
+
+{% if bbscopy.question_text or bbscopy.picture %}
+<div class="container card mt-3 box-shadow border-white">
+    <h4 class="card-title border-bottom border-secondary mt-3 mb-3 pb-1">帖子内容</h4>
+    <div class="comment-widgets m-b-20">
+        <figure class="figure col-10">
+            <figcaption class="text-dark h6 ml-3">{{bbscopy.get_text_to_md}}</figcaption>
+            {% if bbscopy.picture %}
+            <img src="{{bbscopy.picture.url}}" class="mt-1 ml-3 figure-img img-fluid rounded "
+            alt="{{bbscopy.user}}的帖子图片" style="max-width: 800px;max-height: 400px;">
+            {% endif %}
+        </figure>
+    </div>
+</div>
+{% endif %}
+
+<div class="container card-body mt-3 box-shadow">
+    <h4 class="card-title">最新评论</h4>
+    <h6 class="card-subtitle border-bottom border-secondary mb-3 pb-1">回帖根据评论时间升序排列</h6>
+    {% if bbscopy.choice_set.all %}
+    <div class="comment-widgets m-b-20">
+        {% for c in bbscopy.choice_set.all %}
+        <div class="d-flex flex-row">
+            <div class="p-2">
+                {% for u,p in u_to_p_dict.items %}
+                    {%  if c.user_id == u%}
+                    <img style="border-radius: 50%;" src="{{ p.url }} " alt="{{c.user}}" height="50" width="50">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="comment-text w-100 ml-3">
+                <h5 class=" mt-3 mb-0">{{c.user}}</h5>
+                <div class="comment-footer mb-2">
+                    <span class="count text-dark small">{{forloop.counter}}楼</span>
+                </div>
+                <div class="m-b-5 m-t-10 border-bottom pb-3">
+                    {{c.get_text_to_md}}
+                    {% if c.picture %}
+                    <div class="mt-1">
+                        <img src="{{ c.picture.url }}" alt="{{c.user}}的图片" style="max-width: 800px;max-height: 400px;">
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>此帖子还没有评论呢~</p>
+    {% endif %}
+</div>
+
+<div class="container card p-0 mt-3 mb-3 box-shadow border-white">
+    <div class="card-header bg-white">想说点什么……</div>
+    <div class="card-body p-2 mt-2 ml-2">
+        {% if now_user.is_login %}
+        <blockquote class="blockquote">
+            <form action="{%url 'bbscopy:reply' bbscopy.id %}" method="POST" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="reply_name">昵称:
+                        <input disabled type="text" class="form-control" id="reply_name" name="reply_name"
+                            value="{{now_user.user}}"></label>
+                </div>
+                <div class="form-group">
+                    {{ choiceform.as_p }}
+                </div>
+                <input class="btn btn-light btn-lg mt-2" type="submit" value="提交">
+            </form>
+        </blockquote>
+        {% else %}
+        <h3>快去登录你的帐号来发表点看法吧~</h3>
+        <a class="btn btn-primary col-1 mb-3" href="{% url 'accounts:login_user' %}" role="button">登录</a>
+        {% endif %}
+        <footer class="mt-3 blockquote-footer p-0"><cite title="Source Title">感谢你对论坛社区做出的贡献~ </cite></footer>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block jslink %}
+<script src="{% static 'js/simplemde.min.js' %}"></script>
+<script>
+var mde = new SimpleMDE();
+</script>
+{% endblock %}
+
