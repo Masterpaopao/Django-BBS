@@ -32,7 +32,7 @@ UP2U - BBS | 用户登录
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
         <div class="mt-1">
-            <a href="#!">忘记密码？</a>
+            <a class="float-left"  href="{% url 'accounts:find_password'%}">忘记密码？</a>
             <a class="float-right" href="{% url 'accounts:register_user'%}">没有帐号？立即注册</a>
         </div>
         <p class="mt-5 mb-3 text-muted text-center">&copy; Masterpaopao</p>

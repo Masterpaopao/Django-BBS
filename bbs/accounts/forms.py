@@ -21,7 +21,6 @@ class RegisterForm(forms.ModelForm):
                 'maxlength':'18',
                 'class':'form-control',
                 'placeholder':'请设置密码...'
-
             }
         )
     )
@@ -33,12 +32,11 @@ class RegisterForm(forms.ModelForm):
                 'maxlength':'18',
                 'class':'form-control',
                 'placeholder':'请确保您的两次输入密码一致...'
-
             }
         )
     )
     email = forms.CharField(
-        label = '用户名',
+        label = '邮箱',
         widget = forms.EmailInput(
             attrs={
                 'class':'form-control',

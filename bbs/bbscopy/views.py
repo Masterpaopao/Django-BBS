@@ -9,8 +9,10 @@ from .forms import ChoiceForm
 from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView,CreateView
 
 
+# 论坛首页
 def index(request):
     latest_bbscopy_list = Question.objects.order_by('-pub_date')
     
@@ -26,6 +28,8 @@ def index(request):
     return render(request,'bbscopy/index.html',
     {'latest_bbscopy_list':latest_bbscopy_list,'questionform':questionform,'now_user':{'user':request.user,'is_login':request.user.is_authenticated},})
 
+
+# 帖子详情
 def detail(request,bbscopy_id):
     try:
         bbscopy = Question.objects.get(pk=bbscopy_id)
@@ -45,6 +49,8 @@ def detail(request,bbscopy_id):
     {'q_pic':q_pic,'u_to_p_dict':u_to_p_dict,'bbscopy': bbscopy,'choiceform':choiceform,
     'now_user':{'user':request.user,'is_login':request.user.is_authenticated}})
 
+
+# 发表帖子
 @login_required
 def topic(request):
     try:
@@ -63,6 +69,8 @@ def topic(request):
     else:
         return HttpResponseRedirect(reverse('bbscopy:index'))
 
+
+# 回复帖子
 @login_required
 def reply(request, bbscopy_id):
     bbscopy = get_object_or_404(Question, pk=bbscopy_id)
@@ -89,9 +97,6 @@ def reply(request, bbscopy_id):
     else:
         return HttpResponseRedirect(reverse('bbscopy:detail', args=(bbscopy.id,)))
 
- 
-
-from django.views.generic import ListView,CreateView
 
 class QuestionListView(ListView):
     model = Question

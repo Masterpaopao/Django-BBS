@@ -26,12 +26,14 @@ class ChoiceForm(forms.ModelForm):
         model = Choice
         fields = ['choice_text','picture']
 
+
 class QuestionForm(forms.ModelForm):
     question_title = forms.CharField(
         label = "帖子标题",
         widget = forms.TextInput(
             attrs={
                 'class':'form-control',
+                'style':'width:500px;',
                 'placeholder':'不超过20字...',
                 'minlength':'2',
                 'maxlength':'20'

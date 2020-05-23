@@ -6,7 +6,7 @@ UP2U - BBS | {{bbscopy.question_title}}
 {% endblock %}
 
 {% block csslink %}
-<link rel="stylesheet" href="{% static 'css/simplemde.min.css' %}">
+<link rel="stylesheet" href="{% static 'editor.md/css/editormd.min.css' %}" />
 {% endblock %}
 
 <h1>{{error_message}}</h1>
@@ -82,7 +82,7 @@ UP2U - BBS | {{bbscopy.question_title}}
                 <div class="comment-footer mb-2">
                     <span class="count text-dark small">{{forloop.counter}}楼</span>
                 </div>
-                <div class="m-b-5 m-t-10 border-bottom pb-3">
+                <div class="m-b-5 m-t-10 border-bottom-0 pb-3">
                     {{c.get_text_to_md}}
                     {% if c.picture %}
                     <div class="mt-1">
@@ -112,8 +112,14 @@ UP2U - BBS | {{bbscopy.question_title}}
                         <input disabled type="text" class="form-control" id="reply_name" name="reply_name"
                             value="{{now_user.user}}"></label>
                 </div>
-                <div class="form-group">
-                    {{ choiceform.as_p }}
+                <div class="form-group" style="height:500px;">
+                    <label for="choice_text">发表评论:</label>
+                    <div id="editor">
+                            {{ choiceform.choice_text }}</div>
+                </div>
+                <div class="form-group mt-5">
+                    <label for="picture">上传图片(可选):
+                    {{ choiceform.picture }}</label>
                 </div>
                 <input class="btn btn-light btn-lg mt-2" type="submit" value="提交">
             </form>
@@ -130,9 +136,17 @@ UP2U - BBS | {{bbscopy.question_title}}
 
 
 {% block jslink %}
-<script src="{% static 'js/simplemde.min.js' %}"></script>
-<script>
-var mde = new SimpleMDE();
+<script src="{% static 'editor.md/examples/js/jquery.min.js' %}"></script>
+<script src="{% static 'editor.md/editormd.min.js' %}"></script>
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("editor", {
+            width: "100%",
+            height: "100%",
+            markdown: "请输入你的评论...",     
+            path : "{% static 'editor.md/lib/' %}"
+        });
+    });
 </script>
 {% endblock %}
 
